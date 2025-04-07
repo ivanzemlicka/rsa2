@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <title>Šifrování a Dešifrování</title>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        macros: {
+          modn: ["\\,\\operatorname{mod}\\, #1", 1]
+        }
+      }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 2em;
+      line-height: 1.6;
+    }
+    h2, h3 {
+      margin-top: 1.5em;
+    }
+    p {
+      margin: 1em 0;
+    }
+  </style>
+</head>
+<body>
+  <h3>Šifrování a dešifrování</h3>
+  <p>
+    RSA funguje na principu, že existuje rychlý algoritmus mocnění modulo n (viz sekci ?), ale dosud není znám žádný efektivní algoritmus na inverzní operaci, počítání odmnocniny modulo n.
+  </p>
+  <p>
+    Adresát si najde dvě dostatečně velká různá prvočísla $p,q$ a veřejný klíč $e$ nesoudělný s $(p-1)(q-1)$. Poté spočte soukromý klíč $d=e^{-1} \modn{(p-1)(q-1)}$ (d je prostě takové číslo, které po vynásobení $e$ a zmodulení $(p-1)(q-1)$ dá jedničku). $e$ můžu spočítat pomocí rozšířeného euklidova algoritmu a bezoutovy rovnosti.
+  </p>
+  <p>
+    Veřejným klíčem bude dvojice $(e,n)$, soukromým klíčem potom dvojice $(d,n)$.
+  </p>
+  <p>
+    Jako ve všech asymetrických šifrách může kdokoliv zprávu zašifrovat, ale dešifrovat jí může jen ten, kdo zná soukromý klíč.
+  </p>
+  <p>
+    Zprávu $a$ zašifrujeme umocněním na $e$:
+  </p>
+  <p>
+    $a^e \modn{n}$ a tuto hodnotu pošleme nezabezpečeným kanálem.
+  </p>
+  <p>
+    Člověk znající veřejný klíč zprávu dešifruje umocněním na $d$:
+  </p>
+  <p>
+    $(a^e)^d \modn{n} \equiv a^{ed} \modn{n} \equiv a^{ed \modn{\phi(n)}} \modn{n} \equiv a^{ed \modn{(p-1)(q-1)}} \modn{n} \equiv a^{1} \modn{n} \equiv a \modn{n}$
+  </p>
+  <p>
+    a dostane původní zprávu $a$.
+  </p>
+  <h3>zrychlení dešifrování pomocí řešení soustavy kongruencí</h3>
+
+<code>
+        def Decrypt_CRT(encrypted_message, e, p, q):
+    <br/>
+        d=cmath_rsa.inverse_mod(e,(p-1)*(q-1))
+        <br/>
+        x1=cmath_rsa.Binar_power_mod(encrypted_message,int(d)%int((p-1)),p)
+        <br/>
+        x2=cmath_rsa.Binar_power_mod(encrypted_message,d%(q-1),q)
+        <br/>
+        dm=cmath_rsa.garner_2(x1,x2,p,q)[0]        
+        <br/>
+        return(dm) 
+</code>
+
+  <h3>Generování velkých prvočísel</h3>
+  <p>
+    Jak to funguje přesně, vysvětlovat nebudu a zájemce odkazuji na skripta Vítězslava Kaly (<a href="https://www.karlin.mff.cuni.cz/~kala/files/TC25.pdf" target="_blank">https://www.karlin.mff.cuni.cz/~kala/files/TC25.pdf</a> kapitola 5) nebo jiné zdroje.
+  
+<br/>
+    Přibližně to funguje tak, že náhodně zvolím liché číslo $p$. Postupně testuju, jestli je $p$ prvočíslo. testuju to pravděpodobnostním testem, ale pravděpodobnost správného výsledku je velmi vysoká. K  $p$ přičítám dva dokud nenarazím na prvočíslo. Jelikož je prvočísel docela hodně, tak to není zas tak pomalé.
+
+</p>
+  <h3>Slepý podpis</h3>
+  <p>
+    Slepý podpis se používá, když chceme aby ten kdo podepisuje nevěděl co podepisuje (například při elektronických volbách nechceme, aby mohl volební komisař spojit náš hlas s naším jménem)
+
+
+    <br/>
+    Stejný klíč jako pro podpis nemůžeme používat k šifrování zpráv, protože podepisování je stejné jako dešifrování. Někdo by si tak mohl nechat podepsat zašifrovanou zprávu a tak se dostat k původní zprávě. 
+  </p>
+  <p>
+    <a href="https://en.wikipedia.org/wiki/Blind_signature" target="_blank">https://en.wikipedia.org/wiki/Blind_signature</a>
+  </p>
+</body>
+</html>

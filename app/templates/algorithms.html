@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <title>LaTeX in HTML Content</title>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        macros: {
+          modn: ["\\,\\operatorname{mod}\\, #1", 1]
+        }
+      }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+  <h3>modulární mocnění</h3>
+  <p>input: $a$, $k$, $n$ přirozená čísla)</p>
+  <p>output: $a^k \modn{n}$</p>
+  <p>
+    Spočítám $a \modn{n}$, $a^2 \modn{n}$, $a^4 \modn{n}$, $a^8 \modn{n}$, &hellip; až do největší mocniny dvojky menší nebo rovné $k$. Když znám $a^i \modn{n}$ tak spočtu $a^{2i} \modn{n} = (a^i)^2 \modn{n}$
+  </p>
+  <p>
+    $a^k \modn{}$ potom spočtu vynásobením těch mocnin $a$ mocnin dvojky, které se vyskytují ve dvojkovém zápisu čísla $k$.
+  </p>
+  <p>
+    Poznámka: já jsem použil variaci tohoto algoritmu, který má konstantní paměǒvou složitost a nepatrně jednoduššeji se implementuje.
+  </p>
+
+  <h3>euklidův algoritmus</h3>
+  <p>input: $a$, $b$</p>
+  <p>output: $NSD(a,b)$, $u$, $v$ splňující $NSD(a,b)=au+bv$</p>
+  <ol>
+    <li>$a_1=a$, $a_2=b$, $u_1=1$, $u_2=0$, $v_1=0$, $v_2=1$, $i=1$</li>
+    <li>while $a_{i+1} \neq 0$ do $q=a_{i} \,div\, a_{i+1}$, $r=a_{i} \,mod\, a_{i+1}$, $a_{i+1}= $</li>
+    <li>return $a_{i-1}$</li>
+  </ol>
+  <p>
+    Poznámka: stačí když si pomatuji jen poslední dva členy z každé z posloupností, tedy není třeba řešit index $i$ a stačí použít 6 proměnných. Tuto implementaci s konstantní paměťovou složitostí jsem také použil.
+  </p>
+  <p>
+    Bezoutovy koeficenty používám pro výpočet multiplikativního inverzu k $a$ modulo $n$. Bezoutův koeficient u $a$ (zmodulený $n$) bude multiplikativní inverz k $a$. Plyne to z výpočtu: $1=nsd(a,n)=au+vn\equiv au \modn{n}$
+  </p>
+
+  <h3>garnerův algoritmus</h3>
+  <p>
+    Garnerův algoritmus řeší soustavu $n$ kongruencí. Popíšu, a naprogramoval jsem, jen algoritmus pro řešení soustavy 2 kongruencí, protože pro rychlejší dešifrování mi to stačí.
+  </p>
+  <p>
+    Hledám řešení soustavy kongruencí (pro $p$, $q$ nesoudělná):
+  </p>
+  <p>
+    $x \equiv a \modn{p}$<br>
+    $x \equiv b \modn{q}$
+  </p>
+  <p>
+    První kongruenci přepíšu na: $x=a+kp$, pro $k$ přirozené.
+  </p>
+  <p>
+    Dosadím do druhé kongruence $a+kp=b \modn{q}$, tedy $k=p^{-1}(b-a) \modn{q}$
+  </p>
+  <p>
+    Jak na to algoritmicky? Úplně jednodušše.
+  </p>
+  <p>
+    Spočtu $p^{-1} \modn{q}$ pomocí bezoutových koeficientů (popsáno v sekci o euklidové algoritmu.)
+  </p>
+  <p>
+    Potom spočtu $k$ podle vzorce $k=p^{-1}(b-a) \modn{q}$
+  </p>
+  <p>
+    a nakonec spočtu $x$ podle vzorce $x=a+kp$ (zde počítám modulo $pq$ a výsledek bude také modulo $pq$ jak plyne z čínské věty o zbytcích)
+  </p>
+</body>
+<form method="POST" action ="/"> 
+    <input type="submit" name="go_to_homepage" value="go to homepage"></input>
+</form>
+
+</html>

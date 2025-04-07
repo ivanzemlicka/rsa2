@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>RSA unblind</title>
+  </head>
+  <body>
+    <h2>unblind message</h2>
+    <h4>unblind the signed message </h4>
+    <form method="POST" action ="/">
+        signed_message_m: 
+        <input type="text" name="signed_message_m" value="{{ signed_message }}">
+        <br/>
+        random: 
+        <input type="text" name="random" value="{{ random}}">        
+        <br/>
+        n: 
+        <input type="text" name="n" value="{{ n}}">
+        
+        <input type="submit" name="unblind_the_message" value="unblind the message"></input>
+        <input type="submit" name="go_to_homepage" value="go to homepage"></input>
+    </form>
+  </body>
+</html>
+
+

@@ -11,7 +11,7 @@ from app import app
 
 @app.route('/', methods=['GET', 'POST'])
 def method():
- #   try:
+    try:
         if request.method == 'POST':
 
         #home page
@@ -211,5 +211,5 @@ def method():
         #nonsense
         else:
             return render_template("error.html", error_text="not get not post")
- #   except:
-#        return render_template("error.html", error_text="probably some of the field was left blank. Try it again.")
+    except:
+        return render_template("error.html", error_text="probably some of the field was left blank. Try it again.")

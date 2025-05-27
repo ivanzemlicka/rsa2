@@ -77,7 +77,7 @@ def method():
         #new rsa
 
             elif "RSA_generate" in request.form: #homepage
-                rsa=new_rsa.new_RSA(2048)
+                rsa=new_rsa.new_RSA(1024)
                 p=rsa[0]
                 q=rsa[1]
                 n=rsa[2]
